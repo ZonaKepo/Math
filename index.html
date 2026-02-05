@@ -2,56 +2,58 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Belajar Matematika</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mari Berhitung</title>
     <style>
         :root {
-            --bg-color: #2c3e50;
-            --card-bg: #34495e;
-            --text-color: #ecf0f1;
-            --accent: #3498db;
-            --correct: #2ecc71;
-            --wrong: #e74c3c;
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #ffffff;
+            --accent: #4fc3f7;
+            --correct: #66bb6a;
+            --wrong: #ef5350;
         }
         body { 
-            font-family: 'Segoe UI', sans-serif; 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
             display: flex; justify-content: center; align-items: center; 
             min-height: 100vh; margin: 0; background-color: var(--bg-color); color: var(--text-color);
         }
         .container { 
-            background: var(--card-bg); padding: 30px; border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 90%; max-width: 400px; text-align: center; 
+            background: var(--card-bg); 
+            padding: 30px 20px; /* Spasi kiri kanan di dalam container */
+            border-radius: 24px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
+            width: 85%; /* Memberi jarak di kiri kanan layar mobile */
+            max-width: 400px; 
+            text-align: center; 
         }
-        .question-box { font-size: 2.2rem; margin: 20px 0; font-weight: bold; position: relative; height: 60px; }
-        .answer-area { display: inline-flex; align-items: center; gap: 10px; }
-        .answer-display { border-bottom: 3px solid var(--accent); min-width: 50px; height: 45px; color: var(--accent); }
-        .feedback { font-size: 2rem; width: 40px; height: 40px; }
+        .question-box { font-size: 2.5rem; margin: 25px 0; font-weight: bold; height: 70px; }
+        .answer-display { border-bottom: 4px solid var(--accent); min-width: 60px; height: 50px; color: var(--accent); display: inline-block; }
+        .feedback { font-size: 2rem; position: absolute; margin-left: 10px; }
         
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 25px; }
         button { 
-            padding: 15px; font-size: 1.3rem; border: none; border-radius: 12px; 
-            background: #455a64; color: white; cursor: pointer; transition: 0.2s; 
+            padding: 18px 5px; font-size: 1.4rem; border: none; border-radius: 15px; 
+            background: #424242; color: white; cursor: pointer; transition: 0.1s;
+            -webkit-tap-highlight-color: transparent;
         }
-        button:active { transform: scale(0.92); background: #546e7a; }
-        .btn-check { grid-column: span 2; background: var(--correct); }
-        .btn-clear { background: var(--wrong); }
+        button:active { transform: scale(0.9); background: #616161; }
+        .btn-check { grid-column: span 2; background: var(--accent); font-weight: bold; }
+        .btn-clear { background: #546e7a; font-size: 1rem; }
         
-        .score-info { margin-top: 20px; font-size: 1rem; opacity: 0.8; }
+        .score-info { margin-top: 25px; font-size: 1.1rem; color: #bbb; }
         .result-screen { display: none; }
-        .game-screen { display: block; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="gameScreen" class="game-screen">
-        <h2 style="margin-top:0">Belajar Matematika</h2>
+    <div id="gameScreen">
+        <h2 style="margin:0; color: #bbb;">Mari Berhitung</h2>
         <div class="question-box">
             <span id="questionText">--</span> = 
-            <div class="answer-area">
-                <span id="answerDisplay" class="answer-display"></span>
-                <span id="feedbackIcon" class="feedback"></span>
-            </div>
+            <span id="answerDisplay" class="answer-display"></span>
+            <span id="feedbackIcon" class="feedback"></span>
         </div>
 
         <div class="grid">
@@ -64,35 +66,34 @@
             <button onclick="inputNumber(7)">7</button>
             <button onclick="inputNumber(8)">8</button>
             <button onclick="inputNumber(9)">9</button>
-            <button onclick="clearAnswer()" class="btn-clear">C</button>
+            <button onclick="clearAnswer()" class="btn-clear">Hapus</button>
             <button onclick="inputNumber(0)">0</button>
-            <button onclick="checkAnswer()" class="btn-check">Cek</button>
+            <button onclick="checkAnswer()" class="btn-check">OKE</button>
         </div>
-        <div class="score-info">Soal ke: <span id="currentIndex">1</span> / 15</div>
+        <div class="score-info">Pertanyaan <span id="currentIndex">1</span> / 15</div>
     </div>
 
     <div id="resultScreen" class="result-screen">
-        <h2>Selesai!</h2>
-        <p style="font-size: 1.2rem">Skor Kamu:</p>
-        <h1 id="finalScore" style="font-size: 4rem; color: var(--accent); margin: 10px 0;">0</h1>
-        <p id="correctCountText">Benar 0 dari 15 soal</p>
-        <button onclick="location.reload()" style="width: 100%; background: var(--accent); margin-top: 20px;">Main Lagi</button>
+        <h2>Sesi Selesai</h2>
+        <p>Skor Akhir Anda:</p>
+        <h1 id="finalScore" style="font-size: 4.5rem; color: var(--accent); margin: 10px 0;">0</h1>
+        <p id="summaryText" style="font-size: 1.2rem; margin-bottom: 30px;"></p>
+        <button onclick="location.reload()" style="width: 100%; background: var(--accent);">Main Lagi</button>
     </div>
 </div>
 
 <script>
-    // Database 60 Soal
     const database = [
-        {q:"12+15", a:27}, {q:"45-22", a:23}, {q:"10*11", a:110}, {q:"88/11", a:8}, {q:"25+25", a:50},
-        {q:"60-15", a:45}, {q:"12*3", a:36}, {q:"90/2", a:45}, {q:"33+17", a:50}, {q:"50-12", a:38},
-        {q:"15+18", a:33}, {q:"70-35", a:35}, {q:"5*12", a:60}, {q:"100/4", a:25}, {q:"22+44", a:66},
-        {q:"80-25", a:55}, {q:"14*2", a:28}, {q:"66/3", a:22}, {q:"19+11", a:30}, {q:"40-18", a:22},
-        {q:"21+19", a:40}, {q:"99-44", a:55}, {q:"7*8", a:56}, {q:"72/6", a:12}, {q:"13+27", a:40},
-        {q:"55-11", a:44}, {q:"15*4", a:60}, {q:"48/4", a:12}, {q:"36+14", a:50}, {q:"85-20", a:65},
-        {q:"11*11", a:121}, {q:"90/3", a:30}, {q:"24+26", a:50}, {q:"100-55", a:45}, {q:"6*15", a:90},
-        {q:"84/2", a:42}, {q:"17+13", a:30}, {q:"65-30", a:35}, {q:"12*5", a:60}, {q:"56/8", a:7},
-        {q:"40+40", a:80}, {q:"77-22", a:55}, {q:"9*9", a:81}, {q:"60/5", a:12}, {q:"18+18", a:36},
-        {q:"90-45", a:45}, {q:"20*4", a:80}, {q:"42/3", a:14}, {q:"31+29", a:60}, {q:"50-25", a:25},
+        {q:"15+24", a:39}, {q:"56-12", a:44}, {q:"12*4", a:48}, {q:"99/9", a:11}, {q:"32+18", a:50},
+        {q:"75-25", a:50}, {q:"11*6", a:66}, {q:"80/4", a:20}, {q:"45+15", a:60}, {q:"90-33", a:57},
+        {q:"13*3", a:39}, {q:"64/8", a:8}, {q:"27+23", a:50}, {q:"88-44", a:44}, {q:"5*15", a:75},
+        {q:"100/5", a:20}, {q:"19+21", a:40}, {q:"60-14", a:46}, {q:"7*12", a:84}, {q:"42/2", a:21},
+        {q:"33+33", a:66}, {q:"85-20", a:65}, {q:"11*11", a:121}, {q:"36/3", a:12}, {q:"50+50", a:100},
+        {q:"70-35", a:35}, {q:"14*3", a:42}, {q:"90/5", a:18}, {q:"25+45", a:70}, {q:"40-18", a:22},
+        {q:"16*2", a:32}, {q:"48/4", a:12}, {q:"12+78", a:90}, {q:"95-15", a:80}, {q:"8*8", a:64},
+        {q:"72/6", a:12}, {q:"31+19", a:50}, {q:"55-11", a:44}, {q:"12*5", a:60}, {q:"63/9", a:7},
+        {q:"20+20", a:40}, {q:"77-22", a:55}, {q:"6*14", a:84}, {q:"100/2", a:50}, {q:"18+14", a:32},
+        {q:"80-15", a:65}, {q:"4*25", a:100}, {q:"45/3", a:15}, {q:"22+28", a:50}, {q:"50-12", a:38},
         {q:"14+16", a:30}, {q:"88-18", a:70}, {q:"11*5", a:55}, {q:"30/2", a:15}, {q:"10+90", a:100},
         {q:"45-15", a:30}, {q:"13*3", a:39}, {q:"64/8", a:8}, {q:"25+75", a:100}, {q:"30-15", a:15}
     ];
@@ -102,7 +103,30 @@
     let userTyped = "";
     let correctAnswers = 0;
 
-    // Acak database dan ambil 15 soal
+    // Suara Benar (Beep Tinggi)
+    function playSoundCorrect() {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = "sine"; osc.frequency.value = 880;
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        osc.start(); gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5);
+        osc.stop(ctx.currentTime + 0.5);
+    }
+
+    // Suara Salah (Buzz Rendah)
+    function playSoundWrong() {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = "sawtooth"; osc.frequency.value = 110;
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        osc.start(); gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5);
+        osc.stop(ctx.currentTime + 0.5);
+    }
+
     function initGame() {
         sessionQuestions = database.sort(() => 0.5 - Math.random()).slice(0, 15);
         updateDisplay();
@@ -116,7 +140,7 @@
     }
 
     function inputNumber(num) {
-        if (userTyped.length < 4) { // Limit input
+        if (userTyped.length < 4) {
             userTyped += num;
             document.getElementById('answerDisplay').innerText = userTyped;
         }
@@ -125,23 +149,26 @@
     function clearAnswer() {
         userTyped = "";
         document.getElementById('answerDisplay').innerText = "";
-        document.getElementById('feedbackIcon').innerText = "";
     }
 
     function checkAnswer() {
         if (userTyped === "") return;
-
         const feedback = document.getElementById('feedbackIcon');
-        if (parseInt(userTyped) === sessionQuestions[currentIdx].a) {
+        const isCorrect = parseInt(userTyped) === sessionQuestions[currentIdx].a;
+
+        if (isCorrect) {
             feedback.innerText = "✔️";
             feedback.style.color = "var(--correct)";
             correctAnswers++;
-            setTimeout(nextQuestion, 800);
+            playSoundCorrect();
         } else {
             feedback.innerText = "❌";
             feedback.style.color = "var(--wrong)";
-            setTimeout(clearAnswer, 800);
+            playSoundWrong();
         }
+
+        // Apapun hasilnya (Benar/Salah), lanjut ke soal berikutnya
+        setTimeout(nextQuestion, 800);
     }
 
     function nextQuestion() {
@@ -157,10 +184,9 @@
     function showResult() {
         document.getElementById('gameScreen').style.display = 'none';
         document.getElementById('resultScreen').style.display = 'block';
-        
         let score = Math.round((correctAnswers / 15) * 100);
         document.getElementById('finalScore').innerText = score;
-        document.getElementById('correctCountText').innerText = `Benar ${correctAnswers} dari 15 soal`;
+        document.getElementById('summaryText').innerText = `Anda menjawab ${correctAnswers} benar dari 15 soal.`;
     }
 
     initGame();
