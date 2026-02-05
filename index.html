@@ -20,16 +20,16 @@
         }
         .container { 
             background: var(--card-bg); 
-            padding: 30px 20px; /* Spasi kiri kanan di dalam container */
+            padding: 30px 20px;
             border-radius: 24px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
-            width: 85%; /* Memberi jarak di kiri kanan layar mobile */
+            width: 85%; 
             max-width: 400px; 
             text-align: center; 
         }
-        .question-box { font-size: 2.5rem; margin: 25px 0; font-weight: bold; height: 70px; }
-        .answer-display { border-bottom: 4px solid var(--accent); min-width: 60px; height: 50px; color: var(--accent); display: inline-block; }
-        .feedback { font-size: 2rem; position: absolute; margin-left: 10px; }
+        .question-box { font-size: 2.5rem; margin: 25px 0; font-weight: bold; height: 70px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .answer-display { border-bottom: 4px solid var(--accent); min-width: 65px; height: 50px; color: var(--accent); display: inline-block; }
+        .feedback { font-size: 2rem; width: 30px; }
         
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 25px; }
         button { 
@@ -49,7 +49,7 @@
 
 <div class="container">
     <div id="gameScreen">
-        <h2 style="margin:0; color: #bbb;">Mari Berhitung</h2>
+        <h2 style="margin:0; color: #bbb; font-weight: normal;">Mari Berhitung</h2>
         <div class="question-box">
             <span id="questionText">--</span> = 
             <span id="answerDisplay" class="answer-display"></span>
@@ -78,24 +78,32 @@
         <p>Skor Akhir Anda:</p>
         <h1 id="finalScore" style="font-size: 4.5rem; color: var(--accent); margin: 10px 0;">0</h1>
         <p id="summaryText" style="font-size: 1.2rem; margin-bottom: 30px;"></p>
-        <button onclick="location.reload()" style="width: 100%; background: var(--accent);">Main Lagi</button>
+        <button onclick="location.reload()" style="width: 100%; background: var(--accent); border-radius: 15px; padding: 15px; color: white; font-size: 1.2rem; border: none;">Main Lagi</button>
     </div>
 </div>
 
 <script>
+    // Database 60 Soal dengan Komposisi:
+    // Tambah (32% = 19), Kurang (32% = 19), Kali (18% = 11), Bagi (18% = 11)
     const database = [
-        {q:"15+24", a:39}, {q:"56-12", a:44}, {q:"12*4", a:48}, {q:"99/9", a:11}, {q:"32+18", a:50},
-        {q:"75-25", a:50}, {q:"11*6", a:66}, {q:"80/4", a:20}, {q:"45+15", a:60}, {q:"90-33", a:57},
-        {q:"13*3", a:39}, {q:"64/8", a:8}, {q:"27+23", a:50}, {q:"88-44", a:44}, {q:"5*15", a:75},
-        {q:"100/5", a:20}, {q:"19+21", a:40}, {q:"60-14", a:46}, {q:"7*12", a:84}, {q:"42/2", a:21},
-        {q:"33+33", a:66}, {q:"85-20", a:65}, {q:"11*11", a:121}, {q:"36/3", a:12}, {q:"50+50", a:100},
-        {q:"70-35", a:35}, {q:"14*3", a:42}, {q:"90/5", a:18}, {q:"25+45", a:70}, {q:"40-18", a:22},
-        {q:"16*2", a:32}, {q:"48/4", a:12}, {q:"12+78", a:90}, {q:"95-15", a:80}, {q:"8*8", a:64},
-        {q:"72/6", a:12}, {q:"31+19", a:50}, {q:"55-11", a:44}, {q:"12*5", a:60}, {q:"63/9", a:7},
-        {q:"20+20", a:40}, {q:"77-22", a:55}, {q:"6*14", a:84}, {q:"100/2", a:50}, {q:"18+14", a:32},
-        {q:"80-15", a:65}, {q:"4*25", a:100}, {q:"45/3", a:15}, {q:"22+28", a:50}, {q:"50-12", a:38},
-        {q:"14+16", a:30}, {q:"88-18", a:70}, {q:"11*5", a:55}, {q:"30/2", a:15}, {q:"10+90", a:100},
-        {q:"45-15", a:30}, {q:"13*3", a:39}, {q:"64/8", a:8}, {q:"25+75", a:100}, {q:"30-15", a:15}
+        // TAMBAH (19 soal)
+        {q:"12+15", a:27}, {q:"24+36", a:60}, {q:"45+12", a:57}, {q:"33+17", a:50}, {q:"50+22", a:72},
+        {q:"18+14", a:32}, {q:"27+23", a:50}, {q:"40+15", a:55}, {q:"66+11", a:77}, {q:"25+45", a:70},
+        {q:"19+21", a:40}, {q:"38+12", a:50}, {q:"55+15", a:70}, {q:"14+16", a:30}, {q:"22+28", a:50},
+        {q:"70+20", a:90}, {q:"13+17", a:30}, {q:"44+16", a:60}, {q:"31+19", a:50},
+        // KURANG (19 soal)
+        {q:"45-12", a:33}, {q:"90-33", a:57}, {q:"56-12", a:44}, {q:"75-25", a:50}, {q:"88-44", a:44},
+        {q:"60-14", a:46}, {q:"85-20", a:65}, {q:"70-35", a:35}, {q:"40-18", a:22}, {q:"95-15", a:80},
+        {q:"55-11", a:44}, {q:"77-22", a:55}, {q:"80-15", a:65}, {q:"50-12", a:38}, {q:"88-18", a:70},
+        {q:"45-15", a:30}, {q:"30-15", a:15}, {q:"99-44", a:55}, {q:"65-30", a:35},
+        // KALI (11 soal - pake x)
+        {q:"12 x 4", a:48}, {q:"11 x 6", a:66}, {q:"13 x 3", a:39}, {q:"5 x 15", a:75}, {q:"7 x 12", a:84},
+        {q:"11 x 11", a:121}, {q:"14 x 3", a:42}, {q:"16 x 2", a:32}, {q:"8 x 8", a:64}, {q:"12 x 5", a:60},
+        {q:"6 x 14", a:84},
+        // BAGI (11 soal)
+        {q:"99/9", a:11}, {q:"80/4", a:20}, {q:"64/8", a:8}, {q:"100/5", a:20}, {q:"42/2", a:21},
+        {q:"36/3", a:12}, {q:"90/5", a:18}, {q:"48/4", a:12}, {q:"72/6", a:12}, {q:"63/9", a:7},
+        {q:"45/3", a:15}
     ];
 
     let sessionQuestions = [];
@@ -103,25 +111,18 @@
     let userTyped = "";
     let correctAnswers = 0;
 
-    // Suara Benar (Beep Tinggi)
-    function playSoundCorrect() {
+    function playSound(type) {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.connect(gain); gain.connect(ctx.destination);
-        osc.type = "sine"; osc.frequency.value = 880;
-        gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        osc.start(); gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5);
-        osc.stop(ctx.currentTime + 0.5);
-    }
-
-    // Suara Salah (Buzz Rendah)
-    function playSoundWrong() {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain); gain.connect(ctx.destination);
-        osc.type = "sawtooth"; osc.frequency.value = 110;
+        
+        if(type === 'correct') {
+            osc.type = "sine"; osc.frequency.value = 880;
+        } else {
+            osc.type = "sawtooth"; osc.frequency.value = 110;
+        }
+        
         gain.gain.setValueAtTime(0.1, ctx.currentTime);
         osc.start(); gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5);
         osc.stop(ctx.currentTime + 0.5);
@@ -160,14 +161,13 @@
             feedback.innerText = "✔️";
             feedback.style.color = "var(--correct)";
             correctAnswers++;
-            playSoundCorrect();
+            playSound('correct');
         } else {
             feedback.innerText = "❌";
             feedback.style.color = "var(--wrong)";
-            playSoundWrong();
+            playSound('wrong');
         }
 
-        // Apapun hasilnya (Benar/Salah), lanjut ke soal berikutnya
         setTimeout(nextQuestion, 800);
     }
 
@@ -186,7 +186,7 @@
         document.getElementById('resultScreen').style.display = 'block';
         let score = Math.round((correctAnswers / 15) * 100);
         document.getElementById('finalScore').innerText = score;
-        document.getElementById('summaryText').innerText = `Anda menjawab ${correctAnswers} benar dari 15 soal.`;
+        document.getElementById('summaryText').innerText = `Benar ${correctAnswers} dari 15 soal.`;
     }
 
     initGame();
