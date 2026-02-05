@@ -3,96 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Challenge Dua Digit</title>
+    <title>Belajar Matematika</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background-color: #f0f2f5; }
-        .container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
-        .question-box { font-size: 2rem; margin-bottom: 20px; font-weight: bold; color: #333; display: flex; justify-content: center; align-items: center; gap: 10px; }
-        .answer-display { border-bottom: 3px solid #007bff; min-width: 60px; min-height: 40px; color: #007bff; }
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
-        button { padding: 15px; font-size: 1.2rem; border: none; border-radius: 8px; background: #e9ecef; cursor: pointer; transition: 0.2s; }
-        button:active { background: #dee2e6; transform: scale(0.95); }
-        .btn-check { grid-column: span 2; background: #28a745; color: white; }
-        .btn-clear { background: #dc3545; color: white; }
-        .score { margin-top: 15px; font-size: 0.9rem; color: #666; }
+        :root {
+            --bg-color: #2c3e50;
+            --card-bg: #34495e;
+            --text-color: #ecf0f1;
+            --accent: #3498db;
+            --correct: #2ecc71;
+            --wrong: #e74c3c;
+        }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0; background-color: var(--bg-color); color: var(--text-color);
+        }
+        .container { 
+            background: var(--card-bg); padding: 30px; border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 90%; max-width: 400px; text-align: center; 
+        }
+        .question-box { font-size: 2.2rem; margin: 20px 0; font-weight: bold; position: relative; height: 60px; }
+        .answer-area { display: inline-flex; align-items: center; gap: 10px; }
+        .answer-display { border-bottom: 3px solid var(--accent); min-width: 50px; height: 45px; color: var(--accent); }
+        .feedback { font-size: 2rem; width: 40px; height: 40px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
+        button { 
+            padding: 15px; font-size: 1.3rem; border: none; border-radius: 12px; 
+            background: #455a64; color: white; cursor: pointer; transition: 0.2s; 
+        }
+        button:active { transform: scale(0.92); background: #546e7a; }
+        .btn-check { grid-column: span 2; background: var(--correct); }
+        .btn-clear { background: var(--wrong); }
+        
+        .score-info { margin-top: 20px; font-size: 1rem; opacity: 0.8; }
+        .result-screen { display: none; }
+        .game-screen { display: block; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Math Challenge</h2>
-    <div class="question-box">
-        <span id="questionText">24 + 12</span> = <span id="answerDisplay" class="answer-display"></span>
+    <div id="gameScreen" class="game-screen">
+        <h2 style="margin-top:0">Belajar Matematika</h2>
+        <div class="question-box">
+            <span id="questionText">--</span> = 
+            <div class="answer-area">
+                <span id="answerDisplay" class="answer-display"></span>
+                <span id="feedbackIcon" class="feedback"></span>
+            </div>
+        </div>
+
+        <div class="grid">
+            <button onclick="inputNumber(1)">1</button>
+            <button onclick="inputNumber(2)">2</button>
+            <button onclick="inputNumber(3)">3</button>
+            <button onclick="inputNumber(4)">4</button>
+            <button onclick="inputNumber(5)">5</button>
+            <button onclick="inputNumber(6)">6</button>
+            <button onclick="inputNumber(7)">7</button>
+            <button onclick="inputNumber(8)">8</button>
+            <button onclick="inputNumber(9)">9</button>
+            <button onclick="clearAnswer()" class="btn-clear">C</button>
+            <button onclick="inputNumber(0)">0</button>
+            <button onclick="checkAnswer()" class="btn-check">Cek</button>
+        </div>
+        <div class="score-info">Soal ke: <span id="currentIndex">1</span> / 15</div>
     </div>
 
-    <div class="grid">
-        <button onclick="inputNumber(1)">1</button>
-        <button onclick="inputNumber(2)">2</button>
-        <button onclick="inputNumber(3)">3</button>
-        <button onclick="inputNumber(4)">4</button>
-        <button onclick="inputNumber(5)">5</button>
-        <button onclick="inputNumber(6)">6</button>
-        <button onclick="inputNumber(7)">7</button>
-        <button onclick="inputNumber(8)">8</button>
-        <button onclick="inputNumber(9)">9</button>
-        <button onclick="clearAnswer()" class="btn-clear">C</button>
-        <button onclick="inputNumber(0)">0</button>
-        <button onclick="checkAnswer()" class="btn-check">Cek</button>
+    <div id="resultScreen" class="result-screen">
+        <h2>Selesai!</h2>
+        <p style="font-size: 1.2rem">Skor Kamu:</p>
+        <h1 id="finalScore" style="font-size: 4rem; color: var(--accent); margin: 10px 0;">0</h1>
+        <p id="correctCountText">Benar 0 dari 15 soal</p>
+        <button onclick="location.reload()" style="width: 100%; background: var(--accent); margin-top: 20px;">Main Lagi</button>
     </div>
-    
-    <div class="score">Soal ke: <span id="currentIndex">1</span> / 10</div>
 </div>
 
 <script>
-    const questions = [
-        { q: "12 + 15", a: 27 }, { q: "45 - 22", a: 23 },
-        { q: "10 * 11", a: 110 }, { q: "88 / 11", a: 8 },
-        { q: "25 + 25", a: 50 }, { q: "60 - 15", a: 45 },
-        { q: "12 * 3", a: 36 }, { q: "90 / 2", a: 45 },
-        { q: "33 + 17", a: 50 }, { q: "50 - 12", a: 38 }
+    // Database 60 Soal
+    const database = [
+        {q:"12+15", a:27}, {q:"45-22", a:23}, {q:"10*11", a:110}, {q:"88/11", a:8}, {q:"25+25", a:50},
+        {q:"60-15", a:45}, {q:"12*3", a:36}, {q:"90/2", a:45}, {q:"33+17", a:50}, {q:"50-12", a:38},
+        {q:"15+18", a:33}, {q:"70-35", a:35}, {q:"5*12", a:60}, {q:"100/4", a:25}, {q:"22+44", a:66},
+        {q:"80-25", a:55}, {q:"14*2", a:28}, {q:"66/3", a:22}, {q:"19+11", a:30}, {q:"40-18", a:22},
+        {q:"21+19", a:40}, {q:"99-44", a:55}, {q:"7*8", a:56}, {q:"72/6", a:12}, {q:"13+27", a:40},
+        {q:"55-11", a:44}, {q:"15*4", a:60}, {q:"48/4", a:12}, {q:"36+14", a:50}, {q:"85-20", a:65},
+        {q:"11*11", a:121}, {q:"90/3", a:30}, {q:"24+26", a:50}, {q:"100-55", a:45}, {q:"6*15", a:90},
+        {q:"84/2", a:42}, {q:"17+13", a:30}, {q:"65-30", a:35}, {q:"12*5", a:60}, {q:"56/8", a:7},
+        {q:"40+40", a:80}, {q:"77-22", a:55}, {q:"9*9", a:81}, {q:"60/5", a:12}, {q:"18+18", a:36},
+        {q:"90-45", a:45}, {q:"20*4", a:80}, {q:"42/3", a:14}, {q:"31+29", a:60}, {q:"50-25", a:25},
+        {q:"14+16", a:30}, {q:"88-18", a:70}, {q:"11*5", a:55}, {q:"30/2", a:15}, {q:"10+90", a:100},
+        {q:"45-15", a:30}, {q:"13*3", a:39}, {q:"64/8", a:8}, {q:"25+75", a:100}, {q:"30-15", a:15}
     ];
 
+    let sessionQuestions = [];
     let currentIdx = 0;
     let userTyped = "";
+    let correctAnswers = 0;
+
+    // Acak database dan ambil 15 soal
+    function initGame() {
+        sessionQuestions = database.sort(() => 0.5 - Math.random()).slice(0, 15);
+        updateDisplay();
+    }
 
     function updateDisplay() {
-        document.getElementById('questionText').innerText = questions[currentIdx].q;
+        document.getElementById('questionText').innerText = sessionQuestions[currentIdx].q;
         document.getElementById('answerDisplay').innerText = userTyped;
         document.getElementById('currentIndex').innerText = currentIdx + 1;
+        document.getElementById('feedbackIcon').innerText = "";
     }
 
     function inputNumber(num) {
-        userTyped += num;
-        updateDisplay();
+        if (userTyped.length < 4) { // Limit input
+            userTyped += num;
+            document.getElementById('answerDisplay').innerText = userTyped;
+        }
     }
 
     function clearAnswer() {
         userTyped = "";
-        updateDisplay();
+        document.getElementById('answerDisplay').innerText = "";
+        document.getElementById('feedbackIcon').innerText = "";
     }
 
     function checkAnswer() {
-        if (parseInt(userTyped) === questions[currentIdx].a) {
-            alert("Benar! 🎉");
-            nextQuestion();
+        if (userTyped === "") return;
+
+        const feedback = document.getElementById('feedbackIcon');
+        if (parseInt(userTyped) === sessionQuestions[currentIdx].a) {
+            feedback.innerText = "✔️";
+            feedback.style.color = "var(--correct)";
+            correctAnswers++;
+            setTimeout(nextQuestion, 800);
         } else {
-            alert("Salah, coba lagi ya!");
-            clearAnswer();
+            feedback.innerText = "❌";
+            feedback.style.color = "var(--wrong)";
+            setTimeout(clearAnswer, 800);
         }
     }
 
     function nextQuestion() {
-        if (currentIdx < questions.length - 1) {
+        if (currentIdx < sessionQuestions.length - 1) {
             currentIdx++;
             userTyped = "";
             updateDisplay();
         } else {
-            alert("Hebat! Kamu sudah menyelesaikan semua soal.");
-            currentIdx = 0;
-            userTyped = "";
-            updateDisplay();
+            showResult();
         }
     }
+
+    function showResult() {
+        document.getElementById('gameScreen').style.display = 'none';
+        document.getElementById('resultScreen').style.display = 'block';
+        
+        let score = Math.round((correctAnswers / 15) * 100);
+        document.getElementById('finalScore').innerText = score;
+        document.getElementById('correctCountText').innerText = `Benar ${correctAnswers} dari 15 soal`;
+    }
+
+    initGame();
 </script>
 
 </body>
