@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Challenge Dua Digit</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background-color: #f0f2f5; }
+        .container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
+        .question-box { font-size: 2rem; margin-bottom: 20px; font-weight: bold; color: #333; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .answer-display { border-bottom: 3px solid #007bff; min-width: 60px; min-height: 40px; color: #007bff; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+        button { padding: 15px; font-size: 1.2rem; border: none; border-radius: 8px; background: #e9ecef; cursor: pointer; transition: 0.2s; }
+        button:active { background: #dee2e6; transform: scale(0.95); }
+        .btn-check { grid-column: span 2; background: #28a745; color: white; }
+        .btn-clear { background: #dc3545; color: white; }
+        .score { margin-top: 15px; font-size: 0.9rem; color: #666; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Math Challenge</h2>
+    <div class="question-box">
+        <span id="questionText">24 + 12</span> = <span id="answerDisplay" class="answer-display"></span>
+    </div>
+
+    <div class="grid">
+        <button onclick="inputNumber(1)">1</button>
+        <button onclick="inputNumber(2)">2</button>
+        <button onclick="inputNumber(3)">3</button>
+        <button onclick="inputNumber(4)">4</button>
+        <button onclick="inputNumber(5)">5</button>
+        <button onclick="inputNumber(6)">6</button>
+        <button onclick="inputNumber(7)">7</button>
+        <button onclick="inputNumber(8)">8</button>
+        <button onclick="inputNumber(9)">9</button>
+        <button onclick="clearAnswer()" class="btn-clear">C</button>
+        <button onclick="inputNumber(0)">0</button>
+        <button onclick="checkAnswer()" class="btn-check">Cek</button>
+    </div>
+    
+    <div class="score">Soal ke: <span id="currentIndex">1</span> / 10</div>
+</div>
+
+<script>
+    const questions = [
+        { q: "12 + 15", a: 27 }, { q: "45 - 22", a: 23 },
+        { q: "10 * 11", a: 110 }, { q: "88 / 11", a: 8 },
+        { q: "25 + 25", a: 50 }, { q: "60 - 15", a: 45 },
+        { q: "12 * 3", a: 36 }, { q: "90 / 2", a: 45 },
+        { q: "33 + 17", a: 50 }, { q: "50 - 12", a: 38 }
+    ];
+
+    let currentIdx = 0;
+    let userTyped = "";
+
+    function updateDisplay() {
+        document.getElementById('questionText').innerText = questions[currentIdx].q;
+        document.getElementById('answerDisplay').innerText = userTyped;
+        document.getElementById('currentIndex').innerText = currentIdx + 1;
+    }
+
+    function inputNumber(num) {
+        userTyped += num;
+        updateDisplay();
+    }
+
+    function clearAnswer() {
+        userTyped = "";
+        updateDisplay();
+    }
+
+    function checkAnswer() {
+        if (parseInt(userTyped) === questions[currentIdx].a) {
+            alert("Benar! 🎉");
+            nextQuestion();
+        } else {
+            alert("Salah, coba lagi ya!");
+            clearAnswer();
+        }
+    }
+
+    function nextQuestion() {
+        if (currentIdx < questions.length - 1) {
+            currentIdx++;
+            userTyped = "";
+            updateDisplay();
+        } else {
+            alert("Hebat! Kamu sudah menyelesaikan semua soal.");
+            currentIdx = 0;
+            userTyped = "";
+            updateDisplay();
+        }
+    }
+</script>
+
+</body>
+</html>
